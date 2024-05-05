@@ -16,30 +16,6 @@ def lireInventaire (NomFichier):
     return Inventaire
 
 
-    Inventaire=contenu.split("\n")
-    
-    lignes=contenu.split("\n")#sépare les lignes
-    for i in range (len(lignes)-1):#sépare les données dans les lignes
-        Inventaire[i]=lignes[i].split(";")
-    
-    
-    '''Trier les information'''
-    Informations=Inventaire[1:]
-    dictionaireInven={}
-    for iIn in range (len(Informations)-1):
-        cle=Informations[iIn][0]
-        valeur=Informations[iIn][1:]
-        dictionaireInven[cle]=valeur
-        
-    for cle, valeurs in dictionaireInven.items():
-        partieentiere, partiedecimale= valeurs.split(',')
-        valeurconvertie = float(partieentiere+'.'+partiedecimale)
-        dictionaireInven[cle]=valeurconvertie
-            
-       
-    return dictionaireInven
-
-
 def lireRecette (NomFichier):
     # Utilisation de l'encoding UTF-8 pour prendre en compte les caracteres avec des accents
     fichier=open(NomFichier,encoding="UTF-8")
