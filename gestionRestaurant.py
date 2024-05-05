@@ -17,6 +17,9 @@ def prendreCommande (plat: str, inventaire:dict, NbCommande:int = 1):
         inventaire[Ingredients['Ingrédients'][i]][0] = float(inventaire[Ingredients['Ingrédients'][i]][0]) - (quantite*NbCommande)
             
     return inventaire
+
+def remplissageInventaire (inventaire:dict, caisse:list):
+    return caisse
         
 if __name__ == '__main__':
     fichierInven='Inventaire.csv'
