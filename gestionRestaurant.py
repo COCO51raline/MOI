@@ -12,6 +12,8 @@ def prendreCommande (plat: str, inventaire:dict, NbCommande:int = 1):
     # pour chaque ingrédient du plat
     for i in range (len(Ingredients['Ingrédients'])):
         # on récupère la quantité de l'ingrédient
+        if Ingredients['Quantité'][i] == '':
+            break
         quantite = float(Ingredients['Quantité'][i].replace(',', '.') )
         # on soustrait la quantité de l'ingrédient du stock de l'inventaire en multipliant par le nombre de commandes
         inventaire[Ingredients['Ingrédients'][i]][0] = float(inventaire[Ingredients['Ingrédients'][i]][0]) - (quantite*NbCommande)
@@ -29,7 +31,7 @@ def remplissageInventaire (inventaire:dict, caisse:list):
             # on ajoute la quantité minimale à la quant
             inventaire[ingredient][0] = quantiteIngredient + quantiteMinimale
             # on soustrait le prix de la quantité minimale à la caisse
-            caisse[0] = float(caisse[0]) - (quantiteMinimale*prixIngredient)
+            caisse["Depenses"] = float(caisse["Depenses"]) - (quantiteMinimale*prixIngredient)
 
     return caisse,inventaire
         
@@ -38,8 +40,14 @@ def finDeJournee(commandes:dict,menu:dict,inventaire:dict,caisse:list):
     for commande in commandes.keys():
         # on prend la commande
         inventaire = prendreCommande(commande, inventaire, commandes[commande])
+        # on ajoute le prix de la commande à la caisse
+        caisse["Recettes"] = float(caisse["Recettes"]) + (float(menu[commande]["Prix sur la carte"][0]) * commandes[commande])
+        # on ajoute le prix de fabrication de la commande à la caisse
+        caisse["Cout Fabrication"] = float(caisse["Cout Fabrication"]) + (float(menu[commande]["Coût de fabrication"][0].replace(',', '.'))*commandes[commande])
     # on remplit l'inventaire
     caisse, inventaire = remplissageInventaire(inventaire, caisse)
+    # on calcule les bénéfices
+    caisse["Benefices"] = caisse["Recettes"] - caisse["Cout Fabrication"]
     return caisse, inventaire
 
 
@@ -50,9 +58,8 @@ if __name__ == '__main__':
     Menu=lireRecette(recette)
     #test pour savoir si le pats est prposer ou non
     afficheInventaire(Inventaire)
-    prendreCommande('Hachis parmentier', Inventaire, 4)
-    afficheInventaire(Inventaire)
-    caisse = [100]
-    caisse, Inventaire = remplissageInventaire(Inventaire, caisse)
+    caisse = {"Depenses":0, "Recettes":0 , "Benefices":0,"Cout Fabrication":0}
+    commandes = {"Hachis parmentier":30, "Chili con carne":10 , "Quiche lorraine":16}
+    caisse, Inventaire = finDeJournee(commandes, Menu, Inventaire, caisse)
     afficheInventaire(Inventaire)
     print(caisse)
