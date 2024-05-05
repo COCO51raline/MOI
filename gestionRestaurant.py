@@ -1,37 +1,22 @@
-from loafCSV import lireInventaire, lireRecette
+from loafCSV import lireInventaire, lireRecette, afficheInventaire
 
-def prendreCommande (plat, inventaire, NbCommande):
-    InventaireQuantité={}
-    for cle, valeurs in inventaire.items():
-        valeur=valeurs[0]
-        InventaireQuantité[cle]=int(valeur)
-        
-    PlatsQuantité={}
+def prendreCommande (plat: str, inventaire:dict, NbCommande:int = 1):
     #print(Menu)
-    for cleM in Menu.keys():
-        if cleM==plat:
-            for cle, valeurs in Menu[cleM].items():
-                if cle=='Ingrédients':
-                    PlatIngré=Menu[cleM][cle]
-                  #  print(PlatIngré)
-                if cle=='Quantité':
-                    PlatQuan=Menu[cleM][cle]
-                 #   print(PlatQuan)
-                    
-                    
-            for i in range (len(PlatIngré)):
-                clePQ=PlatIngré[i]
-                valeurPQ=PlatQuan[i]
-                PlatsQuantité[clePQ]=float[valeurPQ[:valeurPQ.index(",")]+"."+[valeurPQ[valeurPQ.index(","):]]]
-          #  print(PlatsQuantité)
-                
-                
-        
-    '''
-    si les cle sont egale deduir'''
-       
-        
-    return InventaireQuantité
+    # si le plat n'est pas dans le menu
+    if plat not in Menu.keys():
+        # on retourne l'inventaire sans rien modifier
+        return inventaire
+    # si le plat est dans le menu
+    # on récupère les ingrédients du plat
+    Ingredients = Menu[plat]
+    # pour chaque ingrédient du plat
+    for i in range (len(Ingredients['Ingrédients'])):
+        # on récupère la quantité de l'ingrédient
+        quantite = float(Ingredients['Quantité'][i].replace(',', '.') )
+        # on soustrait la quantité de l'ingrédient du stock de l'inventaire en multipliant par le nombre de commandes
+        inventaire[Ingredients['Ingrédients'][i]][0] = float(inventaire[Ingredients['Ingrédients'][i]][0]) - (quantite*NbCommande)
+            
+    return inventaire
         
 if __name__ == '__main__':
     fichierInven='Inventaire.csv'
@@ -39,4 +24,6 @@ if __name__ == '__main__':
     Inventaire=lireInventaire(fichierInven) 
     Menu=lireRecette(recette)
     #test pour savoir si le pats est prposer ou non
-    print(prendreCommande('Hachis parmentier', Inventaire, 4))
+    afficheInventaire(Inventaire)
+    prendreCommande('Hachis parmentier', Inventaire, 4)
+    afficheInventaire(Inventaire)
