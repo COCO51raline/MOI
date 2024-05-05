@@ -33,6 +33,16 @@ def remplissageInventaire (inventaire:dict, caisse:list):
 
     return caisse,inventaire
         
+def finDeJournee(commandes:dict,menu:dict,inventaire:dict,caisse:list):
+    # pour chaque commande
+    for commande in commandes.keys():
+        # on prend la commande
+        inventaire = prendreCommande(commande, inventaire, commandes[commande])
+    # on remplit l'inventaire
+    caisse, inventaire = remplissageInventaire(inventaire, caisse)
+    return caisse, inventaire
+
+
 if __name__ == '__main__':
     fichierInven='Inventaire.csv'
     recette='Recettes.csv'
