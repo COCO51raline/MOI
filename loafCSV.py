@@ -4,6 +4,18 @@ def lireInventaire (NomFichier):
     fichier.close()
     
     '''Séparé les Information'''
+    contenu = contenu.split("\n")
+    Inventaire = {}
+    Ingredients = contenu[0].split(";")
+    for i in range (1,len(contenu)-1):
+        ligne =contenu[i].split(";")
+        Inventaire[ligne[0]] = {}
+        Inventaire[ligne[0]] = ligne[1:]
+    
+    print(Inventaire)
+    return Inventaire
+
+
     Inventaire=contenu.split("\n")
     
     lignes=contenu.split("\n")#sépare les lignes
