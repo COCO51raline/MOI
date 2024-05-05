@@ -19,7 +19,19 @@ def prendreCommande (plat: str, inventaire:dict, NbCommande:int = 1):
     return inventaire
 
 def remplissageInventaire (inventaire:dict, caisse:list):
-    return caisse
+    # pour chaque ingrédient de l'inventaire
+    for ingredient in inventaire.keys():
+        # si la quantité de l'ingrédient est inférieure à la quantité minimale
+        quantiteIngredient = float(inventaire[ingredient][0])
+        quantiteMinimale = float(inventaire[ingredient][3].replace(',', '.'))
+        prixIngredient = float(inventaire[ingredient][1].replace(',', '.'))
+        if quantiteIngredient < quantiteMinimale:
+            # on ajoute la quantité minimale à la quant
+            inventaire[ingredient][0] = quantiteIngredient + quantiteMinimale
+            # on soustrait le prix de la quantité minimale à la caisse
+            caisse[0] = float(caisse[0]) - (quantiteMinimale*prixIngredient)
+
+    return caisse,inventaire
         
 if __name__ == '__main__':
     fichierInven='Inventaire.csv'
@@ -30,3 +42,7 @@ if __name__ == '__main__':
     afficheInventaire(Inventaire)
     prendreCommande('Hachis parmentier', Inventaire, 4)
     afficheInventaire(Inventaire)
+    caisse = [100]
+    caisse, Inventaire = remplissageInventaire(Inventaire, caisse)
+    afficheInventaire(Inventaire)
+    print(caisse)
