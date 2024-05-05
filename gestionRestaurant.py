@@ -1,3 +1,4 @@
+from exportCSV import exportInventaire
 from loafCSV import lireInventaire, lireRecette, afficheInventaire
 
 def prendreCommande (plat: str, inventaire:dict, NbCommande:int = 1):
@@ -63,3 +64,4 @@ if __name__ == '__main__':
     caisse, Inventaire = finDeJournee(commandes, Menu, Inventaire, caisse)
     afficheInventaire(Inventaire)
     print(caisse)
+    exportInventaire(Inventaire)
